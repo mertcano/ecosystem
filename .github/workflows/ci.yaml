@@ -1,5 +1,11 @@
 name: Build and Test
 
+# NOTE: this workflow was inherited from the upstream Quartz repository, where
+# every job is gated on `github.repository == 'jackyzha0/quartz'`. In this fork
+# that guard can never be true, so CI silently reported "skipped" and never
+# actually built or tested the site. The gate is therefore replaced by the
+# real identity of this repository, which keeps the intent (do not run
+# upstream's release/publish jobs on a fork) while making CI actually work here.
 on:
   pull_request:
     branches:
@@ -11,7 +17,7 @@ on:
 
 jobs:
   build-and-test:
-    if: ${{ github.repository == 'jackyzha0/quartz' }}
+    if: ${{ github.repository == 'logos-co/ecosystem' }}
     strategy:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
@@ -47,6 +53,10 @@ jobs:
       - name: Ensure Quartz builds, check bundle info
         run: npx quartz build --bundleInfo -d docs
 
+  # Upstream's release job. It stays disabled here: this fork must not push
+  # `v*` tags or create GitHub releases under the Quartz release train. The
+  # `jackyzha0/quartz` guard is retained deliberately as a hard stop, so an
+  # accidental edit to this repository name cannot start publishing releases.
   publish-tag:
     if: ${{ github.repository == 'jackyzha0/quartz' && github.ref == 'refs/heads/v4' }}
     runs-on: ubuntu-latest

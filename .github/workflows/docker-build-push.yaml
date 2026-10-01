@@ -1,5 +1,8 @@
 name: Docker build & push image
 
+# `jackyzha0/quartz` is upstream's own repository name. Keeping the guard as-is
+# would make every job a no-op here, so the fork's real identity is used.
+# Publishing images for this fork is the intended behaviour.
 on:
   push:
     branches: [v4]
@@ -13,7 +16,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.repository == 'jackyzha0/quartz' }} # Comment this out if you want to publish your own images on a fork!
+    if: ${{ github.repository == 'logos-co/ecosystem' }}
     runs-on: ubuntu-latest
     steps:
       - name: Set lowercase repository owner environment variable

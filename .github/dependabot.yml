@@ -1,0 +1,27 @@
+version: 2
+updates:
+  # Keep npm dependencies current. The repository commits package-lock.json and
+  # CI installs with `npm ci`, so Dependabot's lockfile updates stay in sync
+  # with what CI actually verifies.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      production-dependencies:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+
+  # GitHub Actions are third-party code that executes in CI with access to this
+  # repository's secrets. Keeping them updated closes known vulnerabilities in
+  # the runners themselves.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      ci-dependencies:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
